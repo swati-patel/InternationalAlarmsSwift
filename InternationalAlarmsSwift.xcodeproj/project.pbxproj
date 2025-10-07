@@ -6,13 +6,37 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		D9DAC8342E94CDCD00718CA3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D9DAC7732E9225B200718CA3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D9DAC77A2E9225B200718CA3;
+			remoteInfo = InternationalAlarmsSwift;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		D9DAC77B2E9225B200718CA3 /* InternationalAlarmsSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InternationalAlarmsSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D9DAC8302E94CDCD00718CA3 /* InternationalAlarmsSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InternationalAlarmsSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		D9DAC8562E94DB7500718CA3 /* Exceptions for "InternationalAlarmsSwift" folder in "InternationalAlarmsSwift" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = D9DAC77A2E9225B200718CA3 /* InternationalAlarmsSwift */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		D9DAC77D2E9225B200718CA3 /* InternationalAlarmsSwift */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D9DAC8562E94DB7500718CA3 /* Exceptions for "InternationalAlarmsSwift" folder in "InternationalAlarmsSwift" target */,
+			);
 			path = InternationalAlarmsSwift;
 			sourceTree = "<group>";
 		};
@@ -21,10 +45,22 @@
 			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		D9DAC8312E94CDCD00718CA3 /* InternationalAlarmsSwiftTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = InternationalAlarmsSwiftTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		D9DAC7782E9225B200718CA3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D9DAC82D2E94CDCD00718CA3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -39,6 +75,7 @@
 			children = (
 				D9DAC8002E939BC300718CA3 /* Supporting Files */,
 				D9DAC77D2E9225B200718CA3 /* InternationalAlarmsSwift */,
+				D9DAC8312E94CDCD00718CA3 /* InternationalAlarmsSwiftTests */,
 				D9DAC77C2E9225B200718CA3 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -47,6 +84,7 @@
 			isa = PBXGroup;
 			children = (
 				D9DAC77B2E9225B200718CA3 /* InternationalAlarmsSwift.app */,
+				D9DAC8302E94CDCD00718CA3 /* InternationalAlarmsSwiftTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -77,6 +115,29 @@
 			productReference = D9DAC77B2E9225B200718CA3 /* InternationalAlarmsSwift.app */;
 			productType = "com.apple.product-type.application";
 		};
+		D9DAC82F2E94CDCD00718CA3 /* InternationalAlarmsSwiftTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D9DAC8362E94CDCD00718CA3 /* Build configuration list for PBXNativeTarget "InternationalAlarmsSwiftTests" */;
+			buildPhases = (
+				D9DAC82C2E94CDCD00718CA3 /* Sources */,
+				D9DAC82D2E94CDCD00718CA3 /* Frameworks */,
+				D9DAC82E2E94CDCD00718CA3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D9DAC8352E94CDCD00718CA3 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				D9DAC8312E94CDCD00718CA3 /* InternationalAlarmsSwiftTests */,
+			);
+			name = InternationalAlarmsSwiftTests;
+			packageProductDependencies = (
+			);
+			productName = InternationalAlarmsSwiftTests;
+			productReference = D9DAC8302E94CDCD00718CA3 /* InternationalAlarmsSwiftTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -89,6 +150,11 @@
 				TargetAttributes = {
 					D9DAC77A2E9225B200718CA3 = {
 						CreatedOnToolsVersion = 26.0.1;
+					};
+					D9DAC82F2E94CDCD00718CA3 = {
+						CreatedOnToolsVersion = 26.0.1;
+						LastSwiftMigration = 2600;
+						TestTargetID = D9DAC77A2E9225B200718CA3;
 					};
 				};
 			};
@@ -107,12 +173,20 @@
 			projectRoot = "";
 			targets = (
 				D9DAC77A2E9225B200718CA3 /* InternationalAlarmsSwift */,
+				D9DAC82F2E94CDCD00718CA3 /* InternationalAlarmsSwiftTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		D9DAC7792E9225B200718CA3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D9DAC82E2E94CDCD00718CA3 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -129,7 +203,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D9DAC82C2E94CDCD00718CA3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D9DAC8352E94CDCD00718CA3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D9DAC77A2E9225B200718CA3 /* InternationalAlarmsSwift */;
+			targetProxy = D9DAC8342E94CDCD00718CA3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		D9DAC7842E9225B400718CA3 /* Debug */ = {
@@ -260,6 +349,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = InternationalAlarmsSwift/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -291,6 +381,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = InternationalAlarmsSwift/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -313,6 +404,49 @@
 			};
 			name = Release;
 		};
+		D9DAC8372E94CDCD00718CA3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = swati.InternationalAlarmsSwiftTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/InternationalAlarmsSwift.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/InternationalAlarmsSwift";
+			};
+			name = Debug;
+		};
+		D9DAC8382E94CDCD00718CA3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = swati.InternationalAlarmsSwiftTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/InternationalAlarmsSwift.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/InternationalAlarmsSwift";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -330,6 +464,15 @@
 			buildConfigurations = (
 				D9DAC7872E9225B400718CA3 /* Debug */,
 				D9DAC7882E9225B400718CA3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D9DAC8362E94CDCD00718CA3 /* Build configuration list for PBXNativeTarget "InternationalAlarmsSwiftTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D9DAC8372E94CDCD00718CA3 /* Debug */,
+				D9DAC8382E94CDCD00718CA3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

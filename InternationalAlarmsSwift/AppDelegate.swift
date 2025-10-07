@@ -9,12 +9,15 @@
 import UIKit
 import UserNotifications
 import AVFoundation
+import AlarmKit
 
 @objc class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate, AVAudioPlayerDelegate {
     
     var window: UIWindow?
     var audioPlayer: AVAudioPlayer?
     var stopSound = false
+    
+    private let alarmManager = AlarmManager.shared
     
     func application(
         _ application: UIApplication,
@@ -46,25 +49,49 @@ import AVFoundation
         window?.rootViewController = navController
         window?.makeKeyAndVisible()
         
-        // Local notifications permission
-        let center = UNUserNotificationCenter.current()
-        center.delegate = self
-        center.requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
-            if granted {
-                print("Local notifications permission granted")
-            } else {
-                print("Local notifications permission denied")
+       
+        if #available(iOS 26.0, *) {
+            Task {
+                do {
+                    print("calling alarmManager.requestAuthorization().............")
+                    let state = try await alarmManager.requestAuthorization()
+                    if state == .authorized {
+                        print("Authorized")
+                    } else {
+                        print("Not authorized")
+                    }
+                } catch {
+                    print("Error occurred while requesting authorization: \(error)")
+                }
             }
+
         }
+        else {
+            
+            print("no ios 26")
+            
+            // Local notifications permission
+            let center = UNUserNotificationCenter.current()
+            center.delegate = self
+            center.requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
+                if granted {
+                    print("Local notifications permission granted")
+                } else {
+                    print("Local notifications permission denied")
+                }
+            }
+            
+            // Audio session
+            let audioSession = AVAudioSession.sharedInstance()
+            do {
+                try audioSession.setCategory(.playback, options: [.mixWithOthers])
+                try audioSession.setActive(true)
+            } catch {
+                print("Audio session error: \(error.localizedDescription)")
+            }
+            
+        } // no ios 26 - old code
         
-        // Audio session
-        let audioSession = AVAudioSession.sharedInstance()
-        do {
-            try audioSession.setCategory(.playback, options: [.mixWithOthers])
-            try audioSession.setActive(true)
-        } catch {
-            print("Audio session error: \(error.localizedDescription)")
-        }
         UIApplication.shared.beginReceivingRemoteControlEvents()
         
         return true
