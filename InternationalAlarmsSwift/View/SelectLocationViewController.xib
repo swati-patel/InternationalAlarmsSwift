@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SelectLocationViewController">
+            <connections>
+                <outlet property="infoButton" destination="5nM-Ub-hPz" id="FGc-4b-E1P"/>
+                <outlet property="locationTable" destination="kgb-38-DAK" id="3Bp-Gb-6qz"/>
+                <outlet property="searchBar" destination="8Un-Xc-TFx" id="kTp-Wv-9hI"/>
+                <outlet property="view" destination="rHB-Si-GCa" id="Ig1-ei-wnx"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="rHB-Si-GCa">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <searchBar contentMode="redraw" placeholder="city / state / country" translatesAutoresizingMaskIntoConstraints="NO" id="8Un-Xc-TFx">
+                    <rect key="frame" x="0.0" y="95" width="375" height="56"/>
+                    <textInputTraits key="textInputTraits"/>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="bQ5-eO-F4p"/>
+                    </connections>
+                </searchBar>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="kgb-38-DAK">
+                    <rect key="frame" x="0.0" y="185" width="375" height="282"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                </tableView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5nM-Ub-hPz">
+                    <rect key="frame" x="150" y="35" width="75" height="35"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="75" id="rM7-Ia-U6o"/>
+                    </constraints>
+                    <state key="normal" title="Button"/>
+                    <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                </button>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="5Vm-Zm-e05"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="5nM-Ub-hPz" firstAttribute="top" secondItem="5Vm-Zm-e05" secondAttribute="top" constant="15" id="HqK-Bz-49y"/>
+                <constraint firstAttribute="bottom" secondItem="kgb-38-DAK" secondAttribute="bottom" constant="200" id="LQq-98-CbR"/>
+                <constraint firstItem="8Un-Xc-TFx" firstAttribute="leading" secondItem="5Vm-Zm-e05" secondAttribute="leading" id="Ury-pJ-OnA"/>
+                <constraint firstItem="8Un-Xc-TFx" firstAttribute="trailing" secondItem="kgb-38-DAK" secondAttribute="trailing" id="V6O-N1-zMr"/>
+                <constraint firstItem="kgb-38-DAK" firstAttribute="top" secondItem="8Un-Xc-TFx" secondAttribute="bottom" constant="34" id="XDC-0A-50I"/>
+                <constraint firstItem="5nM-Ub-hPz" firstAttribute="centerX" secondItem="5Vm-Zm-e05" secondAttribute="centerX" id="ZPj-mZ-YIj"/>
+                <constraint firstItem="8Un-Xc-TFx" firstAttribute="leading" secondItem="kgb-38-DAK" secondAttribute="leading" id="pwn-np-Q8T"/>
+                <constraint firstItem="8Un-Xc-TFx" firstAttribute="centerX" secondItem="5nM-Ub-hPz" secondAttribute="centerX" id="x6S-ad-sr6"/>
+                <constraint firstItem="8Un-Xc-TFx" firstAttribute="top" secondItem="5nM-Ub-hPz" secondAttribute="bottom" constant="25" id="ybL-Fa-1fL"/>
+            </constraints>
+            <point key="canvasLocation" x="-1582" y="-662"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
