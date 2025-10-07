@@ -1,2 +1,5 @@
 *.db
 *.mp3
+xcuserdata/
+*.xcuserdata
+.DS_Store

@@ -113,13 +113,13 @@ class SelectLocationViewController: UIViewController, UITableViewDelegate, UITab
         
         countries = CountryDao.getCountryList()
         
-        print("NUM COUNTRIES FOUND: " + String(countries.count))
+        //print("NUM COUNTRIES FOUND: " + String(countries.count))
         
         locations = []
         
         // for each country, get city list.
         for country in countries {
-            print("country: " + country.name + " " + String(country.countryId))
+            //print("country: " + country.name + " " + String(country.countryId))
             let cities = CityDao.getCityListByCountry(countryId: country.countryId) ?? []
             
             var seenCities = Set<String>()
@@ -365,7 +365,7 @@ class SelectLocationViewController: UIViewController, UITableViewDelegate, UITab
         
         if searchText.isEmpty {
             searchBarEmpty = true
-            print("NO SEARCH TEXT, RETURNING")
+           //print("NO SEARCH TEXT, RETURNING")
             
             if filtered {
                 locationTable.reloadData()
@@ -374,7 +374,7 @@ class SelectLocationViewController: UIViewController, UITableViewDelegate, UITab
             return
         }
         
-        print("SEARCH TEXT IS ENTERED: \(searchText)")
+        //print("SEARCH TEXT IS ENTERED: \(searchText)")
         
         filtered = true
         filteredLocationList = []
@@ -391,7 +391,7 @@ class SelectLocationViewController: UIViewController, UITableViewDelegate, UITab
             }
         }
         
-        print("FILTERED LIST::: \(filteredLocationList.count)")
+        //print("FILTERED LIST::: \(filteredLocationList.count)")
         searchBarEmpty = false
         
         if filteredLocationList.isEmpty {

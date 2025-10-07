@@ -28,9 +28,12 @@ class AlarmDao {
         for row in alarmDataList {
             guard row.count >= 7 else { continue }
             
-            let alarmId = (row[0] as? NSNumber)?.intValue ?? 0
-            let countryId = (row[1] as? NSNumber)?.intValue ?? 0
-            let cityId = (row[2] as? NSNumber)?.intValue ?? 0
+            //let alarmId = (row[0] as? NSNumber)?.intValue ?? 0
+            let alarmId = Int(row[0] as? String ?? "0") ?? 0
+            //let countryId = (row[1] as? NSNumber)?.intValue ?? 0
+            let countryId = Int(row[1] as? String ?? "0") ?? 0
+            //let cityId = (row[2] as? NSNumber)?.intValue ?? 0
+            let cityId = Int(row[2] as? String ?? "0") ?? 0
             let dateString = row[3] as? String ?? ""
             
             let dateFormatter = DateFormatter()

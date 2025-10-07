@@ -70,7 +70,7 @@ class DatabaseHelper {
     }
     
     func executeSelectQueryWithNumCols(numCols: Int, query: String) -> [[Any]]? {
-        print("In executeSelectQueryWithNumCols: numCols: " + String(numCols) + " query: " + query)
+        //print("In executeSelectQueryWithNumCols: numCols: " + String(numCols) + " query: " + query)
         var retArray: [[Any]] = []
         var doCache = false
         

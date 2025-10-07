@@ -28,18 +28,12 @@ class CountryDao {
             if let dataList = countryDataList {
                 for row in dataList {
                     guard row.count >= 4 else { continue }
-                    
-                    print("country id: \(row[0])")
-                    
-                    //print("Type of row[0]: \(type(of: row[0]))")
-                    
-                   // let countryId = (row[0] as? NSNumber)?.intValue ?? 0
+            
                     let countryId = Int(row[0] as? String ?? "0") ?? 0
                     let name = row[1] as? String ?? ""
                     let mapReference = row[2] as? String ?? ""
                     let iso2 = row[3] as? String ?? ""
                     
-                    print("Country ID here: " + String(countryId))
                     let country = Country(countryId: countryId, name: name, mapReference: mapReference, iso2: iso2)
                     countryList?.append(country)
                 }

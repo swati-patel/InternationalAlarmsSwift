@@ -31,8 +31,10 @@ class RegionDao {
         for row in regionDataList {
             guard row.count >= 3 else { continue }
             
-            let regionId = (row[0] as? NSNumber)?.intValue ?? 0
-            let countryId = (row[1] as? NSNumber)?.intValue ?? 0
+            //let regionId = (row[0] as? NSNumber)?.intValue ?? 0
+            let regionId = Int(row[0] as? String ?? "0") ?? 0
+            //let countryId = (row[1] as? NSNumber)?.intValue ?? 0
+            let countryId = Int(row[1] as? String ?? "0") ?? 0
             let name = row[2] as? String ?? ""
             
             let region = Region(regionId: regionId, countryId: countryId, name: name)

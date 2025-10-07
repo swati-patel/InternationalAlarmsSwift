@@ -516,13 +516,13 @@ class AlarmPickerViewController: UIViewController, UITextFieldDelegate {
     // MARK: - UITextFieldDelegate
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        print("textFieldShouldReturn: \(textField.text ?? "")")
+       // print("textFieldShouldReturn: \(textField.text ?? "")")
         textField.resignFirstResponder()
         return false
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        print("textFieldDidBeginEditing: \(textField.text ?? "")")
+        //print("textFieldDidBeginEditing: \(textField.text ?? "")")
         if editMode && textField.text?.isEmpty == true {
             textField.text = alarmDesc
         }
@@ -530,13 +530,13 @@ class AlarmPickerViewController: UIViewController, UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        print("textFieldDidEndEditing: \(textField.text ?? "")")
+        //print("textFieldDidEndEditing: \(textField.text ?? "")")
         animateTextField(textField, up: false)
         view.endEditing(true)
     }
     
     func animateTextField(_ textField: UITextField, up: Bool) {
-        print("animateTextField: \(textField.text ?? "")")
+        //print("animateTextField: \(textField.text ?? "")")
         
         let movementDistance: CGFloat = 180
         let movementDuration: TimeInterval = 0.3

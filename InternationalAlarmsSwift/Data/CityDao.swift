@@ -38,7 +38,7 @@ class CityDao {
     
     static func getCityListByCountry(countryId: Int) -> [City]? {
         let query = "\(selectCity) where countryid=\(countryId)"
-        print("In getCityListByCountry: query: " + query)
+        //print("In getCityListByCountry: query: " + query)
         cityDataList = dbHelper.executeSelectQueryWithNumCols(numCols: numCols, query: query)
         cityList = []
         
@@ -50,9 +50,12 @@ class CityDao {
                 continue
             }
             
-            let cityId = (row[0] as? NSNumber)?.intValue ?? 0
-            let countryId = (row[1] as? NSNumber)?.intValue ?? 0
-            let regionId = (row[2] as? NSNumber)?.intValue ?? 0
+            //let cityId = (row[0] as? NSNumber)?.intValue ?? 0
+            let cityId = Int(row[0] as? String ?? "0") ?? 0
+            //let countryId = (row[1] as? NSNumber)?.intValue ?? 0
+            let countryId = Int(row[1] as? String ?? "0") ?? 0
+            //let regionId = (row[2] as? NSNumber)?.intValue ?? 0
+            let regionId = Int(row[2] as? String ?? "0") ?? 0
             let timezone = row[4] as? String ?? ""
             
             let city = City(
