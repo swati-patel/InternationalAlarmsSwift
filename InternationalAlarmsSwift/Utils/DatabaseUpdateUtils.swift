@@ -21,6 +21,58 @@ class DatabaseUpdateUtils {
     
     private static let dbHelper = DatabaseHelper.shared
     
+    static func updateAddUUIDFieldToAlarms() {
+        let key = "DatabaseUpdateForUUIDField_23Nov2025"
+        if UserDefaults.standard.bool(forKey: key) {
+            print("Database update for UUID field already performed.")
+            return
+        }
+        
+        print("Updating database for \(key)")
+        
+        _ = dbHelper.openDatabase()
+        
+        let alterTableQuery = "ALTER TABLE Alarms ADD COLUMN AlarmUUID TEXT"
+        print("Executing query: \(alterTableQuery)")
+        dbHelper.executeQuery(alterTableQuery)
+        print("AlarmUUID column added.")
+        
+        // Generate UUIDs for existing alarms
+        let existingAlarms = AlarmDao.getAlarmList()
+        
+        // TODO - cancel notification, then add alarm to alarm kit
+        
+//        for alarm in existingAlarms {
+//            let uuid = UUID().uuidString
+//            let updateQuery = "UPDATE Alarms SET AlarmUUID = '\(uuid)' WHERE AlarmID = \(alarm.alarmId)"
+//            print("Executing query: \(updateQuery)")
+//            dbHelper.executeQuery(updateQuery)
+//        }
+        
+        
+       
+        
+        
+//        for alarm in existingAlarms {
+//            // Cancel old notification
+//            DateUtils.cancelNotification(alarmId: alarm.alarmId)
+//            
+//            // Schedule with AlarmKit (this will generate/use proper UUID)
+//            // ... AlarmKit scheduling code here ...
+//            // Get back the UUID from AlarmKit
+//            
+//            // Update DB with that UUID
+//            let updateQuery = "UPDATE Alarms SET AlarmUUID = '\(alarmKitUUID)' WHERE AlarmID = \(alarm.alarmId)"
+//            dbHelper.executeQuery(updateQuery)
+//        }
+        
+        print("UUIDs generated for existing alarms.")
+        
+        UserDefaults.standard.set(true, forKey: key)
+        UserDefaults.standard.synchronize()
+        print("UUID field update completed.")
+    }
+    
     static func updateAddRepeatFieldToAlarms() {
         let key = "DatabaseUpdateForRepeatField_6May2025_V5"
         if UserDefaults.standard.bool(forKey: key) {
@@ -150,13 +202,15 @@ class DatabaseUpdateUtils {
             let defaultSound = "piano_long.mp3"
             let defaultRepeatValue = "none"
             
+            // TODO UUID VAL
             let alarmId = AlarmDao.saveAlarm(
                 countryId: alarm.countryId,
                 cityId: alarm.cityId,
                 alarm: alarmStr,
                 desc: description,
                 sound: defaultSound,
-                repeatVal: defaultRepeatValue
+                repeatVal: defaultRepeatValue,
+                uuidVal: " "
             )
             
             if alarmId != alarm.alarmId {

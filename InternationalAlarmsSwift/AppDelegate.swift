@@ -64,7 +64,6 @@ import AlarmKit
                     print("Error occurred while requesting authorization: \(error)")
                 }
             }
-
         }
         else {
             

@@ -10,10 +10,10 @@ import Foundation
 class InternationalAlarm {
     var country: Country?
     var city: City?
-    var alarm: Alarm
+    var alarm: WorldAlarm
     var description: String
 
-    init(country: Country?, city: City?, alarm: Alarm, description: String) {
+    init(country: Country?, city: City?, alarm: WorldAlarm, description: String) {
         self.country = country
         self.city = city
         self.alarm = alarm

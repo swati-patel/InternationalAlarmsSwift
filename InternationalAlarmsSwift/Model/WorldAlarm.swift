@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Alarm {
+class WorldAlarm {
     var alarmId: Int
     var countryId: Int
     var cityId: Int
@@ -16,6 +16,7 @@ class Alarm {
     var description: String?
     var sound: String?
     var repeatValue: String?
+    var uuidValue: String?
     
     init(date: Date) {
         self.alarmId = 0
@@ -25,15 +26,17 @@ class Alarm {
         self.description = nil
         self.sound = nil
         self.repeatValue = nil
+        self.uuidValue = nil
     }
     
-    init(alarmId: Int, countryId: Int, cityId: Int, date: Date, desc: String?, sound: String?, repeat repeatVal: String?) {
+    init(alarmId: Int, countryId: Int, cityId: Int, date: Date, desc: String?, sound: String?, repeat repeatVal: String?, uuid uuidVal: String?) {
         self.alarmId = alarmId
         self.countryId = countryId
         self.cityId = cityId
         self.date = date
         self.sound = sound
         self.repeatValue = repeatVal
+        self.uuidValue = uuidVal
         
         if let descVal = desc, !descVal.isEmpty {
             let firstLetter = descVal.prefix(1).capitalized

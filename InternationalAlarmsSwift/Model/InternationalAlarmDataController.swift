@@ -50,14 +50,15 @@ class InternationalAlarmDataController {
             let calendar = Calendar(identifier: .gregorian)
             let components = Calendar.current.dateComponents([.minute, .hour, .day, .month, .year], from: date)
             
-            let alarm2 = Alarm(
+            let alarm2 = WorldAlarm(
                 alarmId: alarm.alarmId,
                 countryId: alarm.countryId,
                 cityId: alarm.cityId,
                 date: alarm.date,
                 desc: alarm.description,
                 sound: alarm.sound,
-                repeat: alarm.repeatValue
+                repeat: alarm.repeatValue,
+                uuid: alarm.uuidValue
             )
             
             let description = alarm.description ?? ""
@@ -95,7 +96,7 @@ class InternationalAlarmDataController {
         return masterInternationalAlarmList[index]
     }
     
-    func addInternationalAlarm(country: Country?, city: City?, alarm: Alarm, description: String) {
+    func addInternationalAlarm(country: Country?, city: City?, alarm: WorldAlarm, description: String) {
         let intAlarm = InternationalAlarm(country: country, city: city, alarm: alarm, description: description)
         masterInternationalAlarmList.append(intAlarm)
     }

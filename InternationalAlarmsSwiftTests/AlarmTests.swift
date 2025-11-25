@@ -30,7 +30,7 @@ class AlarmTests: XCTestCase {
     
     func testInitWithDate() {
         let now = Date()
-        let alarm = Alarm(date: now)
+        let alarm = WorldAlarm(date: now)
         let formatter = DateFormatter()
         
         print("date: \(formatter.string(from: now))")

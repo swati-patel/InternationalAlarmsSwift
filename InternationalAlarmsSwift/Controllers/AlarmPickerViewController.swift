@@ -474,6 +474,67 @@ class AlarmPickerViewController: UIViewController, UITextFieldDelegate {
         
         print("saving REPEAT VAL:::::::::: \(alarmRepeatValue ?? "")")
         
+//        if !editMode {
+//            print("saving SOUND:::::::::: \(alarmSound ?? "")")
+//            alarmId = AlarmDao.saveAlarm(
+//                countryId: countryId,
+//                cityId: cityId,
+//                alarm: alarmStr,
+//                desc: description,
+//                sound: alarmSound,
+//                repeatVal: alarmRepeatValue
+//            )
+//        } else {
+//            alarmId = AlarmDao.saveAlarm(
+//                countryId: countryId,
+//                cityId: cityId,
+//                alarm: alarmStr,
+//                desc: description,
+//                sound: alarmSound,
+//                repeatVal: alarmRepeatValue
+//            )
+//            
+//            // TODO we need to fix this to no longer use notifications - but we WILL use this code to handle existing alarms - so we need to keep this code
+//            
+//            AlarmDao.deleteAlarm(withId: deleteAlarmID)
+//            DateUtils.cancelNotification(alarmId: deleteAlarmID)
+//            print("Deleted alarm: \(deleteAlarmID), now saving new with desc: \(description ?? "")")
+//        }
+        
+        let sound = UNNotificationSound(named: UNNotificationSoundName(alarmSound ?? ""))
+        
+//        DateUtils.setNotification(
+//            intDate: intDate,
+//            withCountry: country?.name,
+//            withCity: city?.name,
+//            withTimeString: alarmStr,
+//            withDesc: description,
+//            withSound: sound,
+//            withAlarmId: alarmId
+//        )
+        
+      //  AlarmKitUtils.scheduleAlarm(date: intDate, country: country?.name, city: city?.name, description: description, alarmId: alarmId);
+        
+        var uuid = ""
+        Task {
+            do {
+                 uuid = try await AlarmKitUtils.scheduleAlarm(
+                    date: intDate,
+                    country: country?.name,
+                    city: city?.name,
+                    description: description
+                )
+                // Store the uuid in your alarm object here
+                print("Alarm scheduled with UUID: \(uuid)")
+                
+                
+                
+            } catch {
+                print("Failed to schedule alarm: \(error)")
+            }
+        }
+       
+        
         if !editMode {
             print("saving SOUND:::::::::: \(alarmSound ?? "")")
             alarmId = AlarmDao.saveAlarm(
@@ -482,7 +543,8 @@ class AlarmPickerViewController: UIViewController, UITextFieldDelegate {
                 alarm: alarmStr,
                 desc: description,
                 sound: alarmSound,
-                repeatVal: alarmRepeatValue
+                repeatVal: alarmRepeatValue,
+                uuidVal: uuid
             )
         } else {
             alarmId = AlarmDao.saveAlarm(
@@ -491,24 +553,16 @@ class AlarmPickerViewController: UIViewController, UITextFieldDelegate {
                 alarm: alarmStr,
                 desc: description,
                 sound: alarmSound,
-                repeatVal: alarmRepeatValue
+                repeatVal: alarmRepeatValue,
+                uuidVal: uuid
             )
+            
+            // TODO we need to fix this to no longer use notifications - but we WILL use this code to handle existing alarms - so we need to keep this code
+            
             AlarmDao.deleteAlarm(withId: deleteAlarmID)
             DateUtils.cancelNotification(alarmId: deleteAlarmID)
             print("Deleted alarm: \(deleteAlarmID), now saving new with desc: \(description ?? "")")
         }
-        
-        let sound = UNNotificationSound(named: UNNotificationSoundName(alarmSound ?? ""))
-        
-        DateUtils.setNotification(
-            intDate: intDate,
-            withCountry: country?.name,
-            withCity: city?.name,
-            withTimeString: alarmStr,
-            withDesc: description,
-            withSound: sound,
-            withAlarmId: alarmId
-        )
         
         navigationController?.popToRootViewController(animated: true)
     }

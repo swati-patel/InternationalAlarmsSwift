@@ -15,24 +15,23 @@ class AlarmDao {
     static private let selectAlarms = "SELECT * FROM Alarms"
     static private let saveAlarm = "INSERT INTO Alarms VALUES"
     static private let deleteAlarm = "DELETE FROM Alarms WHERE alarmid="
-    static private let numCols = 7
+    static private let numCols = 8
     
     static let dbHelper = DatabaseHelper.shared
     
     // MARK: - Get all alarms
-    static func getAlarmList() -> [Alarm] {
+    static func getAlarmList() -> [WorldAlarm] {
         let alarmDataList = dbHelper.executeSelectQueryWithNumCols(numCols: numCols, query: selectAlarms) ?? []
         
-        var alarmList: [Alarm] = []
+        var alarmList: [WorldAlarm] = []
         
         for row in alarmDataList {
-            guard row.count >= 7 else { continue }
+            guard row.count >= 8 else { continue }
             
-            //let alarmId = (row[0] as? NSNumber)?.intValue ?? 0
             let alarmId = Int(row[0] as? String ?? "0") ?? 0
-            //let countryId = (row[1] as? NSNumber)?.intValue ?? 0
+
             let countryId = Int(row[1] as? String ?? "0") ?? 0
-            //let cityId = (row[2] as? NSNumber)?.intValue ?? 0
+
             let cityId = Int(row[2] as? String ?? "0") ?? 0
             let dateString = row[3] as? String ?? ""
             
@@ -43,14 +42,16 @@ class AlarmDao {
             let desc = row[4] as? String
             let sound = row[5] as? String
             let repeatValue = row[6] as? String
+            let uuidValue = row[7] as? String
             
-            let alarm = Alarm(alarmId: alarmId,
+            let alarm = WorldAlarm(alarmId: alarmId,
                             countryId: countryId,
                             cityId: cityId,
                             date: date,
                             desc: desc,
                             sound: sound,
-                            repeat: repeatValue)
+                            repeat: repeatValue,
+                            uuid: uuidValue)
             
             alarmList.append(alarm)
         }
@@ -59,8 +60,8 @@ class AlarmDao {
     }
     
     // MARK: - Save alarm
-    static func saveAlarm(countryId: Int, cityId: Int, alarm: String, desc: String?, sound: String?, repeatVal: String?) -> Int {
-        let values = "(NULL, '\(countryId)', '\(cityId)', '\(alarm)', '\(desc ?? "")', '\(sound ?? "")', '\(repeatVal ?? "")');"
+    static func saveAlarm(countryId: Int, cityId: Int, alarm: String, desc: String?, sound: String?, repeatVal: String?, uuidVal: String?) -> Int {
+        let values = "(NULL, '\(countryId)', '\(cityId)', '\(alarm)', '\(desc ?? "")', '\(sound ?? "")', '\(repeatVal ?? "")', '\(uuidVal ?? "")');"
         let saveCmd = saveAlarm + values
         dbHelper.executeQuery(saveCmd)
         return dbHelper.getLastId()
