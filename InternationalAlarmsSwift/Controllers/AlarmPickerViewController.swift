@@ -501,7 +501,7 @@ class AlarmPickerViewController: UIViewController, UITextFieldDelegate {
 //            print("Deleted alarm: \(deleteAlarmID), now saving new with desc: \(description ?? "")")
 //        }
         
-        let sound = UNNotificationSound(named: UNNotificationSoundName(alarmSound ?? ""))
+     //   let sound = UNNotificationSound(named: UNNotificationSoundName(alarmSound ?? ""))
         
 //        DateUtils.setNotification(
 //            intDate: intDate,
@@ -513,8 +513,6 @@ class AlarmPickerViewController: UIViewController, UITextFieldDelegate {
 //            withAlarmId: alarmId
 //        )
         
-      //  AlarmKitUtils.scheduleAlarm(date: intDate, country: country?.name, city: city?.name, description: description, alarmId: alarmId);
-        
         var uuid = ""
         Task {
             do {
@@ -522,7 +520,8 @@ class AlarmPickerViewController: UIViewController, UITextFieldDelegate {
                     date: intDate,
                     country: country?.name,
                     city: city?.name,
-                    description: description
+                    description: description,
+                    sound: alarmSound
                 )
                 // Store the uuid in your alarm object here
                 print("Alarm scheduled with UUID: \(uuid)")

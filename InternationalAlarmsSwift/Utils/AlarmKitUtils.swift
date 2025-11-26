@@ -40,11 +40,14 @@ class AlarmKitUtils {
         date: Date,
         country: String?,
         city: String?,
-        description: String?
+        description: String?,
+        sound: String?
     ) async throws -> String {
         
+        print("In scheduleAlarm: sound: " + sound!)
+        
         // Create alert content
-        let title = description ?? "World Alarm"
+        let title = "World Alarms\n" + (description ?? "Your Event")
         let alertContent = AlarmPresentation.Alert(
             title: LocalizedStringResource(stringLiteral: title),
             stopButton: .stopButton
@@ -57,30 +60,15 @@ class AlarmKitUtils {
             metadata: EmptyMetadata(),
             tintColor: Color.blue
         )
-        
-        // Create schedule from date
-       // let calendar = Calendar.current
-       // let components = calendar.dateComponents([.hour, .minute], from: date)
-        
+               
         let schedule = AlarmKit.Alarm.Schedule.fixed(date)
-        
-//        let time2 = AlarmKit.Alarm.Schedule.Relative.Time(
-//            hour: components.hour ?? 0,
-//            minute: components.minute ?? 0
-//        )
-//        let schedule2 = AlarmKit.Alarm.Schedule.relative(.init(
-//            time: time,
-//            repeats: .never
-//        ))
-        
-        // Create configuration
-       // let alarmConfiguration1 = AlarmConfiguration(
         
         // Create configuration
         let alarmConfiguration = AlarmConfiguration(
             schedule: schedule,
             attributes: attributes,
-            sound: .named("piano_longgg.mp3")
+            secondaryIntent: nil,
+            sound: .default
         )
         
         // Generate UUID for this alarm
