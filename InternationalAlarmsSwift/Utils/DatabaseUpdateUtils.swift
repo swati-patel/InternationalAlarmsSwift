@@ -17,6 +17,9 @@
 import Foundation
 import UserNotifications
 
+//import AlarmPickerViewController
+
+
 class DatabaseUpdateUtils {
     
     private static let dbHelper = DatabaseHelper.shared
@@ -42,12 +45,31 @@ class DatabaseUpdateUtils {
         
         // TODO - cancel notification, then add alarm to alarm kit
         
-//        for alarm in existingAlarms {
-//            let uuid = UUID().uuidString
-//            let updateQuery = "UPDATE Alarms SET AlarmUUID = '\(uuid)' WHERE AlarmID = \(alarm.alarmId)"
-//            print("Executing query: \(updateQuery)")
-//            dbHelper.executeQuery(updateQuery)
-//        }
+        for alarm in existingAlarms {
+            
+            // schedule in alarm kit
+//            AlarmPickerViewController.scheduleAlarm(date: alarm.date, content: <#T##String#>, sound: <#T##String?#>)
+            
+            
+            // TODO check what sound we store - full filename etc - i think we do.
+         //   do {
+              
+            var uuid=""
+            Task {
+                
+                 uuid = try await AlarmPickerViewController.scheduleAlarm(intDate: alarm.date, countryId: alarm.countryId, cityId: alarm.cityId, description: alarm.description, sound: alarm.sound, repeatVal: alarm.repeatValue)
+            }
+                    print("Alarm scheduled AND saved ")
+                
+           // }
+           // catch {
+                //print("Failed to schedule or save alarm: \(error)")
+          //  }
+            
+            let updateQuery = "UPDATE Alarms SET AlarmUUID = '\(uuid)' WHERE AlarmID = \(alarm.alarmId)"
+            print("Executing query: \(updateQuery)")
+            dbHelper.executeQuery(updateQuery)
+        }
         
         
        

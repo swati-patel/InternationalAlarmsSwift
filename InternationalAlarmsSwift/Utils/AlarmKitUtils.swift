@@ -14,7 +14,6 @@ struct EmptyMetadata: AlarmMetadata {
     // That's it - nothing else needed
 }
 
-
 class AlarmKitUtils {
     
     typealias AlarmConfiguration = AlarmManager.AlarmConfiguration<EmptyMetadata>
@@ -36,23 +35,20 @@ class AlarmKitUtils {
     }
     
     // MARK: - Schedule Alarm
+    // AlarmKitUtils.swift - Schedule Alarm
     static func scheduleAlarm(
         date: Date,
-        country: String?,
-        city: String?,
-        description: String?,
+        content: String,
         sound: String?
     ) async throws -> String {
         
-        print("In scheduleAlarm: sound: " + sound!)
+        print("In scheduleAlarm: sound: " + (sound ?? "default"))
         
         // Create alert content
-        let title = "World Alarms\n" + (description ?? "Your Event")
         let alertContent = AlarmPresentation.Alert(
-            title: LocalizedStringResource(stringLiteral: title),
+            title: LocalizedStringResource(stringLiteral: content),
             stopButton: .stopButton
         )
-    
         
         // Create attributes
         let attributes = AlarmAttributes(
@@ -103,6 +99,7 @@ class AlarmKitUtils {
         try await alarmManager.cancel(id: alarmUUID)
         print("Alarm cancelled successfully")
     }
+    
 }
 
 extension AlarmButton {

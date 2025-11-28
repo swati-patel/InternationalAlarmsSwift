@@ -29,6 +29,7 @@ class AlarmPickerViewController: UIViewController, UITextFieldDelegate {
     var alarmSound: String?
     var alarmRepeatValue: String?
     var deleteAlarmID = 0
+    var cancelAlarmUUid = ""
     
     @IBOutlet weak var descText: UITextField!
     @IBOutlet weak var soundSelected: UILabel!
@@ -412,7 +413,14 @@ class AlarmPickerViewController: UIViewController, UITextFieldDelegate {
         navigationController?.popToRootViewController(animated: true)
     }
     
+    
     @objc func saveButtonPushed() {
+        Task {
+            await saveAlarmAsync()
+        }
+    }
+
+    private func saveAlarmAsync() async {
         print("saving alarm.......................")
         
         let timezone: String
@@ -470,101 +478,88 @@ class AlarmPickerViewController: UIViewController, UITextFieldDelegate {
             description = description?.replacingOccurrences(of: "'", with: "''")
         }
         
-        var alarmId: Int
+       // var alarmId: Int
         
         print("saving REPEAT VAL:::::::::: \(alarmRepeatValue ?? "")")
         
-//        if !editMode {
-//            print("saving SOUND:::::::::: \(alarmSound ?? "")")
-//            alarmId = AlarmDao.saveAlarm(
-//                countryId: countryId,
-//                cityId: cityId,
-//                alarm: alarmStr,
-//                desc: description,
-//                sound: alarmSound,
-//                repeatVal: alarmRepeatValue
-//            )
-//        } else {
-//            alarmId = AlarmDao.saveAlarm(
-//                countryId: countryId,
-//                cityId: cityId,
-//                alarm: alarmStr,
-//                desc: description,
-//                sound: alarmSound,
-//                repeatVal: alarmRepeatValue
-//            )
-//            
-//            // TODO we need to fix this to no longer use notifications - but we WILL use this code to handle existing alarms - so we need to keep this code
-//            
-//            AlarmDao.deleteAlarm(withId: deleteAlarmID)
-//            DateUtils.cancelNotification(alarmId: deleteAlarmID)
-//            print("Deleted alarm: \(deleteAlarmID), now saving new with desc: \(description ?? "")")
-//        }
-        
-     //   let sound = UNNotificationSound(named: UNNotificationSoundName(alarmSound ?? ""))
-        
-//        DateUtils.setNotification(
-//            intDate: intDate,
-//            withCountry: country?.name,
-//            withCity: city?.name,
-//            withTimeString: alarmStr,
-//            withDesc: description,
-//            withSound: sound,
-//            withAlarmId: alarmId
-//        )
-        
         var uuid = ""
-        Task {
+        do {
+            uuid = try await AlarmPickerViewController.scheduleAlarm(intDate: intDate, countryId: countryId, cityId: cityId, description: description, sound: alarmSound, repeatVal: alarmRepeatValue)
+            print("Alarm scheduled AND saved ")
+        }
+        catch {
+            print("Failed to schedule or save alarm: \(error)")
+        }
+        
+        
+        // Save to database with UUID
+        let alarmId = AlarmDao.saveAlarm(
+            countryId: countryId,
+            cityId: cityId,
+            alarm: alarmStr,
+            desc: description,
+            sound: alarmSound,
+            repeatVal: alarmRepeatValue,
+            uuidVal: uuid
+        )
+
+        // delete from DB and cancel alarm
+        if (editMode) {
+            AlarmDao.deleteAlarm(withId: deleteAlarmID)
+            // cancel alarm
             do {
-                 uuid = try await AlarmKitUtils.scheduleAlarm(
-                    date: intDate,
-                    country: country?.name,
-                    city: city?.name,
-                    description: description,
-                    sound: alarmSound
-                )
-                // Store the uuid in your alarm object here
-                print("Alarm scheduled with UUID: \(uuid)")
-                
-                
-                
-            } catch {
-                print("Failed to schedule alarm: \(error)")
+                try await AlarmKitUtils.cancelAlarm(uuid: cancelAlarmUUid)
+                print("Alarm successfully deleted and cancelled for edit")
+            }
+            catch {
+                print("UNABLE TO CANCEL ALARM!!!!! " + cancelAlarmUUid)
             }
         }
-       
-        
-        if !editMode {
-            print("saving SOUND:::::::::: \(alarmSound ?? "")")
-            alarmId = AlarmDao.saveAlarm(
-                countryId: countryId,
-                cityId: cityId,
-                alarm: alarmStr,
-                desc: description,
-                sound: alarmSound,
-                repeatVal: alarmRepeatValue,
-                uuidVal: uuid
-            )
-        } else {
-            alarmId = AlarmDao.saveAlarm(
-                countryId: countryId,
-                cityId: cityId,
-                alarm: alarmStr,
-                desc: description,
-                sound: alarmSound,
-                repeatVal: alarmRepeatValue,
-                uuidVal: uuid
-            )
-            
-            // TODO we need to fix this to no longer use notifications - but we WILL use this code to handle existing alarms - so we need to keep this code
-            
-            AlarmDao.deleteAlarm(withId: deleteAlarmID)
-            DateUtils.cancelNotification(alarmId: deleteAlarmID)
-            print("Deleted alarm: \(deleteAlarmID), now saving new with desc: \(description ?? "")")
-        }
-        
+
+
         navigationController?.popToRootViewController(animated: true)
     }
+    
+    static func scheduleAlarm (
+        intDate: Date,
+        countryId: Int,
+        cityId: Int,
+        description: String?,
+        sound: String?,
+        repeatVal: String?
+    ) async throws -> String {
+        // Look up country and city names from IDs
+        let country = CountryDao.getCountryById(id: countryId)
+        let city = CityDao.getCityById(cityId: cityId)
+        
+        // Build the content string for AlarmKit display
+        var content = "World Alarms\n"
+        content += (description ?? "Your Event")
+        if let cityName = city?.name, let countryName = country?.name {
+            content += "\n\(cityName), \(countryName)"
+        }
+        
+        var uuid = ""
+        // Schedule with AlarmKit first
+
+             uuid = try await AlarmKitUtils.scheduleAlarm(
+                date: intDate,
+                content: content,
+                sound: sound
+            )
+            print("Alarm scheduled with UUID: \(uuid)")
+        
+        return uuid
+            
+
+      //  }
+      //  catch {
+         //   print("Failed to schedule alarm: \(error)")
+        //}
+
+    }
+    
+
     
     // MARK: - UITextFieldDelegate
     

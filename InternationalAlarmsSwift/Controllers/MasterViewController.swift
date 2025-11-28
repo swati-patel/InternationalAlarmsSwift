@@ -562,6 +562,7 @@ class MasterViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         alarmPickerVC.editMode = true
         alarmPickerVC.deleteAlarmID = alarm.alarm.alarmId
+        alarmPickerVC.cancelAlarmUUid = alarm.alarm.uuidValue! // TODO check
         alarmPickerVC.date = alarm.alarm.date
         alarmPickerVC.alarmDesc = alarm.alarm.description
         alarmPickerVC.alarmSound = alarm.alarm.sound
