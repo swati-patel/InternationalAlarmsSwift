@@ -22,10 +22,11 @@ import UserNotifications
 
 class DatabaseUpdateUtils {
     
+    
     private static let dbHelper = DatabaseHelper.shared
     
-    static func updateAddUUIDFieldToAlarms() {
-        let key = "DatabaseUpdateForUUIDField_23Nov2025"
+    static func updateAddUUIDFieldToAlarms() async {
+        let key = "DatabaseUpdateForUUIDField_23Nov2025_14"
         if UserDefaults.standard.bool(forKey: key) {
             print("Database update for UUID field already performed.")
             return
@@ -34,6 +35,9 @@ class DatabaseUpdateUtils {
         print("Updating database for \(key)")
         
         _ = dbHelper.openDatabase()
+        
+        
+       // print("------------------ COMMENTED OUT ALTER TABLE QUERY ----------------------")
         
         let alterTableQuery = "ALTER TABLE Alarms ADD COLUMN AlarmUUID TEXT"
         print("Executing query: \(alterTableQuery)")
@@ -47,48 +51,47 @@ class DatabaseUpdateUtils {
         
         for alarm in existingAlarms {
             
-            // schedule in alarm kit
-//            AlarmPickerViewController.scheduleAlarm(date: alarm.date, content: <#T##String#>, sound: <#T##String?#>)
+            DateUtils.cancelNotification(alarmId: alarm.alarmId)
             
-            
-            // TODO check what sound we store - full filename etc - i think we do.
-         //   do {
               
-            var uuid=""
-            Task {
+            do {
                 
-                 uuid = try await AlarmPickerViewController.scheduleAlarm(intDate: alarm.date, countryId: alarm.countryId, cityId: alarm.cityId, description: alarm.description, sound: alarm.sound, repeatVal: alarm.repeatValue)
+                
+                // Get the timezone for this alarm
+                let city = CityDao.getCityById(cityId: alarm.cityId)
+                let timezone = city?.timezone ?? "GMT"
+//
+//                // Convert the alarm date string with timezone
+//                let dateFormatter = DateUtils.getDateFormatter()
+//                let alarmStr = dateFormatter.string(from: alarm.date)
+//
+//                let intDf = DateUtils.getDateFormatterForTimezone(timezone: timezone)
+//                guard let intDate = intDf.date(from: alarmStr) else { continue }
+
+               
+                guard let intDate = DateUtils.convertDateToTimezone(date: alarm.date, timezone: timezone) else { continue }
+                
+                
+                print("Scheduling alarm \(alarm.alarmId): date=\(alarm.date), desc=\(alarm.description ?? "nil"), sound=\(alarm.sound ?? "nil")")
+                
+                // Now use intDate for scheduling
+                let uuid = try await AlarmPickerViewController.scheduleAlarm(intDate: intDate, countryId: alarm.countryId, cityId: alarm.cityId, description: alarm.description, sound: alarm.sound, repeatVal: alarm.repeatValue)
+                print("Alarm scheduled AND saved ")
+                
+               // print("------------------ COMMENTED OUT UPDATE QUERY ----------------------")
+                
+                let updateQuery = "UPDATE Alarms SET AlarmUUID = '\(uuid)' WHERE AlarmID = \(alarm.alarmId)"
+                print("Executing query: \(updateQuery)")
+                dbHelper.executeQuery(updateQuery)
             }
-                    print("Alarm scheduled AND saved ")
-                
-           // }
-           // catch {
-                //print("Failed to schedule or save alarm: \(error)")
-          //  }
-            
-            let updateQuery = "UPDATE Alarms SET AlarmUUID = '\(uuid)' WHERE AlarmID = \(alarm.alarmId)"
-            print("Executing query: \(updateQuery)")
-            dbHelper.executeQuery(updateQuery)
+            catch {
+                print("Error occurred while scheduling alarm: \(error)")
+                print("Error details: \(error.localizedDescription)")
+            }
+
         }
         
-        
-       
-        
-        
-//        for alarm in existingAlarms {
-//            // Cancel old notification
-//            DateUtils.cancelNotification(alarmId: alarm.alarmId)
-//            
-//            // Schedule with AlarmKit (this will generate/use proper UUID)
-//            // ... AlarmKit scheduling code here ...
-//            // Get back the UUID from AlarmKit
-//            
-//            // Update DB with that UUID
-//            let updateQuery = "UPDATE Alarms SET AlarmUUID = '\(alarmKitUUID)' WHERE AlarmID = \(alarm.alarmId)"
-//            dbHelper.executeQuery(updateQuery)
-//        }
-        
-        print("UUIDs generated for existing alarms.")
+       // print("UUIDs generated for existing alarms.")
         
         UserDefaults.standard.set(true, forKey: key)
         UserDefaults.standard.synchronize()

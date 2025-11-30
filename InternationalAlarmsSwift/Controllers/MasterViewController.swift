@@ -268,9 +268,14 @@ class MasterViewController: UIViewController, UITableViewDelegate, UITableViewDa
             
             passed = (now.compare(newDate) == .orderedDescending)
             
+            
+            // TODO re-visit after repeat functionality
             if passed {
                 print("Alarm has passed! Removing from list!!")
-                dataController.removeObjectFromMasterInternationalAlarmList(at: i)
+                
+                Task {
+                    await dataController.removeObjectFromMasterInternationalAlarmList(at: i)
+                }
             }
         }
     }
@@ -479,8 +484,8 @@ class MasterViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            dataController.removeObjectFromMasterInternationalAlarmList(at: indexPath.section)
-            alarmsTable.reloadData()
+            Task { await dataController.removeObjectFromMasterInternationalAlarmList(at: indexPath.section)
+                alarmsTable.reloadData() }
         }
     }
     

@@ -101,13 +101,18 @@ class InternationalAlarmDataController {
         masterInternationalAlarmList.append(intAlarm)
     }
     
-    func removeObjectFromMasterInternationalAlarmList(at index: Int) {
+    func removeObjectFromMasterInternationalAlarmList(at index: Int) async {
         let alarm = masterInternationalAlarmList[index]
         let alarmId = alarm.alarm.alarmId
         
         masterInternationalAlarmList.remove(at: index)
         
-        DateUtils.cancelNotification(alarmId: alarmId)
+        //DateUtils.cancelNotification(alarmId: alarmId)
+        do {
+            try await AlarmKitUtils.cancelAlarm(uuid: alarm.alarm.uuidValue!)
+        } catch {
+            print("Failed to cancel alarm: \(error)")
+        }
         AlarmDao.deleteAlarm(withId: alarmId)
     }
     

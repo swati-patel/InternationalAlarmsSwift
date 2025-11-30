@@ -43,13 +43,7 @@ import AlarmKit
         DatabaseUpdateUtils.updateAddSoundFieldToAlarms()
         DatabaseUpdateUtils.updateAddRepeatFieldToAlarms()
         
-        // Root ViewController setup (UIKit)
-        let masterVC = MasterViewController(nibName: "MasterViewController", bundle: nil)
-        let navController = UINavigationController(rootViewController: masterVC)
-        window?.rootViewController = navController
-        window?.makeKeyAndVisible()
-        
-       
+    
         if #available(iOS 26.0, *) {
             Task {
                 do {
@@ -57,9 +51,19 @@ import AlarmKit
                     let state = try await alarmManager.requestAuthorization()
                     if state == .authorized {
                         print("Authorized")
+                        await DatabaseUpdateUtils.updateAddUUIDFieldToAlarms()
                     } else {
                         print("Not authorized")
                     }
+                    
+                    // Now set up UI after migration completes
+                               await MainActor.run {
+                                   let masterVC = MasterViewController(nibName: "MasterViewController", bundle: nil)
+                                   let navController = UINavigationController(rootViewController: masterVC)
+                                   window?.rootViewController = navController
+                                   window?.makeKeyAndVisible()
+                               }
+                    
                 } catch {
                     print("Error occurred while requesting authorization: \(error)")
                 }

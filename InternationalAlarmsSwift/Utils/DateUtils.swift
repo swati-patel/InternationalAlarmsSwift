@@ -323,4 +323,12 @@ class DateUtils {
         let minute = getMinutesFromDate(date: date)
         return isDayWithHour(hour: hour, minute: minute)
     }
+    
+    static func convertDateToTimezone(date: Date, timezone: String) -> Date? {
+        let dateFormatter = getDateFormatter()
+        let alarmStr = dateFormatter.string(from: date)
+        
+        let intDf = getDateFormatterForTimezone(timezone: timezone)
+        return intDf.date(from: alarmStr)
+    }
 }

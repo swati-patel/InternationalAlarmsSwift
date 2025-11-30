@@ -66,11 +66,14 @@ class AlarmKitUtils {
             secondaryIntent: nil,
             sound: .default
         )
-        
+      
         // Generate UUID for this alarm
         let alarmUUID = UUID()
         
         print("Scheduling alarm with UUID: \(alarmUUID.uuidString) for date: \(date)")
+        
+        print("About to schedule: date=\(date), content=\(content), sound=\(sound ?? "nil")")
+        print("Date is in future: \(date > Date())")
         
         // Schedule the alarm
         let alarm = try await alarmManager.schedule(
@@ -80,12 +83,28 @@ class AlarmKitUtils {
         
         print("Alarm scheduled successfully: \(alarm.id)")
         
-        let allAlarms = try alarmManager.alarms
-        print("All scheduled alarms: \(allAlarms)")
+//        let allAlarms1 = try alarmManager.alarms
+//        print("AFTER total scheduled alarms: \(allAlarms1.count)")
+//        print("AFTER All scheduled alarms: \(allAlarms1)")
         
-        print("Scheduled alarm state: \(alarm)")
+       // print("Scheduled alarm state: \(alarm)")
         
         return alarmUUID.uuidString
+    }
+    
+    // for test purposes only
+    static func deleteAllAlarms() async {
+        do {
+            let allAlarms = try alarmManager.alarms
+        
+       // print("All scheduled alarms: \(allAlarms)")
+        for a in allAlarms {
+            try await AlarmKitUtils.cancelAlarm(uuid: a.id.uuidString)
+            }
+        }
+        catch {
+            
+        }
     }
     
     // MARK: - Cancel Alarm

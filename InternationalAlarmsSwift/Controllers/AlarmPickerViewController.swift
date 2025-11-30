@@ -533,7 +533,7 @@ class AlarmPickerViewController: UIViewController, UITextFieldDelegate {
         let city = CityDao.getCityById(cityId: cityId)
         
         // Build the content string for AlarmKit display
-        var content = "World Alarms\n"
+        var content = ""
         content += (description ?? "Your Event")
         if let cityName = city?.name, let countryName = country?.name {
             content += "\n\(cityName), \(countryName)"
