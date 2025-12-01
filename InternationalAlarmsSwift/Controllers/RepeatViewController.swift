@@ -5,14 +5,6 @@
 //  Created by Swati Patel on 6/10/2025.
 //
 
-
-//
-//  RepeatViewController.swift
-//  InternationalAlarmsSwift
-//
-//  Created by Swati Patel on 5/10/2025.
-//
-
 import UIKit
 
 typealias RepeatSelectionCompletionBlock = (String) -> Void
@@ -23,14 +15,16 @@ class RepeatViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBOutlet weak var repeatsTable: UITableView!
     
     var selectedDate: Date?
-    var selectedAlarmRepeatValue: String?
+    var selectedAlarmRepeatValue: String? // Receives comma-separated weekdays or "none"
     
     var completionBlock: RepeatSelectionCompletionBlock?
     
-    private var displayNameToValueMap: [String: String] = [:]
-    private static var valueToDisplayNameMap: [String: String] = [:]
-    private static var valueToShortDisplayNameMap: [String: String] = [:]
-    private var displayNames: [String] = []
+    // Changed from String to Set<String>
+    private var selectedWeekdays: Set<String> = []
+    
+    // Ordered weekday list for display
+    private let weekdays = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+    private let weekdayDisplayNames = ["Every Monday", "Every Tuesday", "Every Wednesday", "Every Thursday", "Every Friday", "Every Saturday", "Every Sunday"]
     
     func initOnce() {
         repeatsTable.delegate = self
@@ -42,16 +36,6 @@ class RepeatViewController: UIViewController, UITableViewDelegate, UITableViewDa
         repeatsTable.layer.cornerRadius = 12
         repeatsTable.clipsToBounds = true
         
-        title = "Select Alarm Sound"
-        
-        let backButtonItem = UIBarButtonItem(
-            title: "Back",
-            style: .done,
-            target: self,
-            action: #selector(backPushed)
-        )
-        navigationItem.leftBarButtonItem = backButtonItem
-        
         repeatsTable.tableFooterView = UIView(frame: .zero)
     }
     
@@ -60,113 +44,17 @@ class RepeatViewController: UIViewController, UITableViewDelegate, UITableViewDa
         repeatsTable.reloadData()
     }
     
-    func initDisplayNames(_ date: Date) {
-        let calendar = Calendar.current
-        
-        let dayFormatter = DateFormatter()
-        dayFormatter.dateFormat = "EEEE"
-        let dayOfWeek = dayFormatter.string(from: date)
-        
-        let components = calendar.dateComponents([.day], from: date)
-        let dayOfMonth = components.day ?? 1
-        
-        let weeklyString = "Weekly (Every \(dayOfWeek))"
-        
-        let ordinalSuffix = ordinalSuffix(forDay: dayOfMonth)
-        let monthlyString: String
-        
-        if dayOfMonth >= 29 {
-            monthlyString = "Monthly (Every \(dayOfMonth)\(ordinalSuffix), or last day if unavailable)"
-        } else {
-            monthlyString = "Monthly (Every \(dayOfMonth)\(ordinalSuffix))"
-        }
-        
-        RepeatViewController.valueToDisplayNameMap = [
-            "none": "None",
-            "daily": "Daily",
-            "yearly": "Yearly"
-        ]
-        
-        RepeatViewController.valueToDisplayNameMap["weekly"] = weeklyString
-        RepeatViewController.valueToDisplayNameMap["monthly"] = monthlyString
-        
-        displayNames = []
-        
-        let orderedKeys = ["none", "daily", "weekly", "monthly", "yearly"]
-        
-        for key in orderedKeys {
-            if let displayValue = RepeatViewController.valueToDisplayNameMap[key] {
-                displayNames.append(displayValue)
-            }
-        }
-        
-        displayNameToValueMap = [:]
-        for (value, displayName) in RepeatViewController.valueToDisplayNameMap {
-            displayNameToValueMap[displayName] = value
-        }
-        
-        print("displayNameToValueMAP: \(displayNameToValueMap)")
-        print("valueToDisplayNameMAP: \(RepeatViewController.valueToDisplayNameMap)")
-    }
-    
-    static func initShortDisplayNames() {
-        valueToShortDisplayNameMap = [
-            "none": "None",
-            "daily": "Daily",
-            "weekly": "Weekly",
-            "monthly": "Monthly",
-            "yearly": "Yearly"
-        ]
-    }
-    
-    static func displayNameToValue(_ displayName: String) -> String? {
-        return valueToDisplayNameMap[displayName]
-    }
-    
-    static func valueToDisplayName(_ value: String) -> String {
-        if valueToShortDisplayNameMap.isEmpty {
-            initShortDisplayNames()
-        }
-        print("valueToDisplayName: \(value)")
-        print("valueToShortDisplayNameMap here: \(valueToShortDisplayNameMap)")
-        return valueToShortDisplayNameMap[value] ?? ""
-    }
-    
-    static func defaultValue() -> String {
-        return "none"
-    }
-    
-    static func isDefaultValue(_ value: String?) -> Bool {
-        return value == "none"
-    }
-    
-    func ordinalSuffix(forDay day: Int) -> String {
-        if day >= 11 && day <= 13 {
-            return "th"
-        }
-        
-        switch day % 10 {
-        case 1:
-            return "st"
-        case 2:
-            return "nd"
-        case 3:
-            return "rd"
-        default:
-            return "th"
-        }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         initOnce()
         
-        if let date = selectedDate {
-            initDisplayNames(date)
+        // Parse incoming selectedAlarmRepeatValue into Set
+        if let repeatValue = selectedAlarmRepeatValue, repeatValue != "none" {
+            selectedWeekdays = Set(repeatValue.split(separator: ",").map { String($0).lowercased() })
         }
         
-        title = "Repeat Alarm"
+        title = "Repeat"
         
         let backButtonItem = UIBarButtonItem(
             title: "Back",
@@ -188,7 +76,7 @@ class RepeatViewController: UIViewController, UITableViewDelegate, UITableViewDa
         infoVC.view.addSubview(containerView)
         
         let titleLabel = UILabel()
-        titleLabel.text = "CAN'T FIND YOUR LOCATION?"
+        titleLabel.text = "REPEAT ALARM"
         titleLabel.font = AppFonts.headerTitleFont()
         titleLabel.textColor = AppColors.accentBlueColor()
         titleLabel.textAlignment = .center
@@ -205,10 +93,9 @@ class RepeatViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         let attributedText = NSMutableAttributedString()
         
-        CommonUIItems.appendInfoBullet("Results appear as you type", toString: attributedText)
-        CommonUIItems.appendInfoBullet("Start typing your city name: e.g. london", toString: attributedText)
-        CommonUIItems.appendInfoBullet("If you don't see your location, start typing the country: e.g. london united kingdom", toString: attributedText)
-        CommonUIItems.appendInfoBullet("Make sure to check your spelling", toString: attributedText)
+        CommonUIItems.appendInfoBullet("Select one or more days for your alarm to repeat", toString: attributedText)
+        CommonUIItems.appendInfoBullet("Tap a day to toggle it on/off", toString: attributedText)
+        CommonUIItems.appendInfoBullet("If no days are selected, alarm will fire once", toString: attributedText)
         
         CommonUIItems.appendInfoSection("FEEDBACK", toString: attributedText)
         CommonUIItems.appendInfoBullet("Send feedback or questions to: swati_patel@icloud.com", toString: attributedText)
@@ -252,19 +139,15 @@ class RepeatViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     @objc func backPushed() {
-        print("repeatController: \(selectedAlarmRepeatValue ?? "")")
-        if let repeatValue = selectedAlarmRepeatValue {
-            didSelectRepeatValue(repeatValue)
-        }
+        // Convert Set back to comma-separated string
+        let repeatValue = selectedWeekdays.isEmpty ? "none" : selectedWeekdays.sorted().joined(separator: ",")
+        print("Returning repeat value: \(repeatValue)")
+        completionBlock?(repeatValue)
         navigationController?.popViewController(animated: true)
     }
     
     @objc func dismissInfoVC(_ sender: Any) {
         dismiss(animated: true, completion: nil)
-    }
-    
-    func didSelectRepeatValue(_ repeatValue: String) {
-        completionBlock?(repeatValue)
     }
     
     // MARK: - Table View
@@ -279,7 +162,7 @@ class RepeatViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         guard let cell = cell else { return UITableViewCell() }
         
-        cell.textLabel?.text = displayNames[indexPath.row]
+        cell.textLabel?.text = weekdayDisplayNames[indexPath.row]
         cell.textLabel?.textColor = AppColors.primaryTextColor()
         cell.backgroundColor = repeatsTable.backgroundColor
         
@@ -292,13 +175,9 @@ class RepeatViewController: UIViewController, UITableViewDelegate, UITableViewDa
             cell.textLabel?.font = AppFonts.mediumFont()
         }
         
-        if let selectedValue = selectedAlarmRepeatValue,
-           let selectedDisplayName = RepeatViewController.valueToDisplayNameMap[selectedValue],
-           let selectedIndex = displayNames.firstIndex(of: selectedDisplayName) {
-            cell.accessoryType = (selectedIndex == indexPath.row) ? .checkmark : .none
-        } else {
-            cell.accessoryType = .none
-        }
+        // Show checkmark if this weekday is selected
+        let weekday = weekdays[indexPath.row]
+        cell.accessoryType = selectedWeekdays.contains(weekday) ? .checkmark : .none
         
         UITableViewCell.appearance().tintColor = AppColors.brightBlueColor()
         
@@ -306,7 +185,7 @@ class RepeatViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return displayNameToValueMap.count
+        return weekdays.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -314,23 +193,51 @@ class RepeatViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("row selected: \(displayNames[indexPath.row])")
+        let weekday = weekdays[indexPath.row]
         
-        let cell = tableView.cellForRow(at: indexPath)
-        cell?.accessoryType = .checkmark
-        
-        for i in 0..<displayNames.count {
-            if i != indexPath.row {
-                let otherIndexPath = IndexPath(row: i, section: 0)
-                tableView.cellForRow(at: otherIndexPath)?.accessoryType = .none
-            }
+        // Toggle selection
+        if selectedWeekdays.contains(weekday) {
+            selectedWeekdays.remove(weekday)
+        } else {
+            selectedWeekdays.insert(weekday)
         }
         
-        guard let selectedRepeat = cell?.textLabel?.text else { return }
+        // Deselect row immediately (so it doesn't stay highlighted)
+        tableView.deselectRow(at: indexPath, animated: true)
         
-        print("selectedRepeat: \(selectedRepeat)")
+        // Reload just this cell to update checkmark
+        tableView.reloadRows(at: [indexPath], with: .none)
+        //tableView.reloadRows(at: [indexPath], animated: false)
         
-        selectedAlarmRepeatValue = displayNameToValueMap[selectedRepeat]
-        print("selectedRepeatValue: \(selectedAlarmRepeatValue ?? "")")
+        print("Selected weekdays: \(selectedWeekdays)")
+    }
+    
+    // MARK: - Static helpers for backward compatibility
+    
+    static func valueToDisplayName(_ value: String) -> String {
+        if value == "none" || value.isEmpty {
+            return "Never"
+        }
+        
+        // For comma-separated weekdays, show short summary
+        let weekdays = value.split(separator: ",").map { String($0).lowercased() }
+        
+        if weekdays.count == 7 {
+            return "Every Day"
+        } else if weekdays.count == 1 {
+            return "Every \(weekdays[0].capitalized)"
+        } else {
+            // Show abbreviated: "Mon, Wed, Fri"
+            let abbreviated = weekdays.map { String($0.prefix(3)).capitalized }
+            return abbreviated.joined(separator: ", ")
+        }
+    }
+    
+    static func defaultValue() -> String {
+        return "none"
+    }
+    
+    static func isDefaultValue(_ value: String?) -> Bool {
+        return value == "none" || value == nil || value?.isEmpty == true
     }
 }
