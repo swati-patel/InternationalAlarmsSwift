@@ -25,6 +25,7 @@ class InternationalAlarmDataController {
             var country: Country?
             
             if alarm.countryId != 0 {
+                print("DEBUG: Fetching country with id: \(alarm.countryId)")
                 country = CountryDao.getCountryById(id: alarm.countryId)
             }
             
@@ -32,6 +33,7 @@ class InternationalAlarmDataController {
             var name: String?
             
             if alarm.cityId != 0 {
+                print("DEBUG: Fetching city with cityId: \(alarm.cityId), countryId: \(alarm.countryId)")
                 name = CityDao.getCityNameByCityId(cityIdVal: alarm.cityId, countryId: alarm.countryId)
             }
             
@@ -62,6 +64,9 @@ class InternationalAlarmDataController {
             )
             
             let description = alarm.description ?? ""
+            
+            
+            print("DEBUG: calling addInternationalAlarm with - country: \(country?.name ?? "nil"), countryId: \(country?.countryId ?? 0)")
             
             addInternationalAlarm(country: country, city: city, alarm: alarm2, description: description)
         }
@@ -97,6 +102,10 @@ class InternationalAlarmDataController {
     }
     
     func addInternationalAlarm(country: Country?, city: City?, alarm: WorldAlarm, description: String) {
+        
+        print("DEBUG: addInternationalAlarm - country: \(country?.name ?? "nil"), countryId: \(country?.countryId ?? 0)")
+        print("DEBUG: addInternationalAlarm - city: \(city?.name ?? "nil"), cityId: \(city?.cityId ?? 0)")
+        
         let intAlarm = InternationalAlarm(country: country, city: city, alarm: alarm, description: description)
         masterInternationalAlarmList.append(intAlarm)
     }

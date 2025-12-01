@@ -18,19 +18,23 @@ class WorldAlarm {
     var repeatValue: String?
     var uuidValue: String?
     
-    init(date: Date) {
-        self.alarmId = 0
-        self.countryId = 0
-        self.cityId = 0
-        self.date = date
-        self.description = nil
-        self.sound = nil
-        self.repeatValue = nil
-        self.uuidValue = nil
-    }
+//    init(date: Date) {
+//        self.alarmId = 0
+//        self.countryId = 0
+//        self.cityId = 0
+//        self.date = date
+//        self.description = nil
+//        self.sound = nil
+//        self.repeatValue = nil
+//        self.uuidValue = nil
+//    }
     
     init(alarmId: Int, countryId: Int, cityId: Int, date: Date, desc: String?, sound: String?, repeat repeatVal: String?, uuid uuidVal: String?) {
         self.alarmId = alarmId
+        
+        
+        print("DEBUG: i dou countryId: \(countryId), cityId: \(cityId)")
+        
         self.countryId = countryId
         self.cityId = cityId
         self.date = date

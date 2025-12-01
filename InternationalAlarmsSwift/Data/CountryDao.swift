@@ -48,8 +48,12 @@ class CountryDao {
     static func getCountryById(id: Int) -> Country? {
         guard let dbHelper = dbHelper else { return nil }
         
+        print("DEBUG: getCountryById called with id: \(id)")
+        
         let query = "\(selectCountryById)\(id)"
         let list = dbHelper.executeSelectQueryWithNumCols(numCols: 4, query: query)
+        
+        print("DEBUG: executing query: \(query)")
         
         guard let list = list else { return nil }
         
@@ -59,7 +63,11 @@ class CountryDao {
         
         guard let row = list.first, row.count >= 4 else { return nil }
         
-        let countryId = (row[0] as? NSNumber)?.intValue ?? 0
+       // let countryId = row[0] as? String ?? "0"
+        let countryId = Int(row[0] as? String ?? "0") ?? 0
+       // let countryId = (row[0] as? NSNumber)?.intValue ?? 0
+        
+        
         let name = row[1] as? String ?? ""
         let mapReference = row[2] as? String ?? ""
         let iso2 = row[3] as? String ?? ""

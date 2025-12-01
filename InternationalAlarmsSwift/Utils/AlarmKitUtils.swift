@@ -59,12 +59,26 @@ class AlarmKitUtils {
                
         let schedule = AlarmKit.Alarm.Schedule.fixed(date)
         
+      //  let alertSound = AlertConfiguration.AlertSound.named("piano_long.mp3")
+        
+       // let alertSound = AlertConfiguration.AlertSound.default
+        
+        var alertSound:AlertConfiguration.AlertSound
+        if (sound == "apple_default") {
+            alertSound = AlertConfiguration.AlertSound.default
+        }
+        else {
+            alertSound = AlertConfiguration.AlertSound.named(sound!)
+        }
+        
         // Create configuration
         let alarmConfiguration = AlarmConfiguration(
             schedule: schedule,
             attributes: attributes,
             secondaryIntent: nil,
-            sound: .default
+            sound: alertSound
+           // sound: .named("piano_long.mp3")
+           // sound: .default
         )
       
         // Generate UUID for this alarm

@@ -31,8 +31,15 @@ class AlarmDao {
             let alarmId = Int(row[0] as? String ?? "0") ?? 0
 
             let countryId = Int(row[1] as? String ?? "0") ?? 0
-
             let cityId = Int(row[2] as? String ?? "0") ?? 0
+            
+            
+            print("DEBUG: countryId from DB row: \(row[1]) -> \(countryId)")
+            print("DEBUG: cityId from DB row: \(row[2]) -> \(cityId)")
+            
+//            let countryId = (row[1] as? NSNumber)?.intValue ?? 0
+//            let cityId = (row[2] as? NSNumber)?.intValue ?? 0
+            
             let dateString = row[3] as? String ?? ""
             
             let dateFormatter = DateFormatter()

@@ -18,9 +18,13 @@ class CityDao {
         for row in cityDataList ?? [] {
             guard row.count >= 5 else { continue }
             
-            let cityId = (row[0] as? NSNumber)?.intValue ?? 0
-            let countryId = (row[1] as? NSNumber)?.intValue ?? 0
-            let regionId = (row[2] as? NSNumber)?.intValue ?? 0
+            let cityId = Int(row[0] as? String ?? "0") ?? 0
+            let countryId = Int(row[1] as? String ?? "0") ?? 0
+            let regionId = Int(row[2] as? String ?? "0") ?? 0
+            
+           // let cityId = (row[0] as? NSNumber)?.intValue ?? 0
+           // let countryId = (row[1] as? NSNumber)?.intValue ?? 0
+           // let regionId = (row[2] as? NSNumber)?.intValue ?? 0
             let name = row[3] as? String ?? ""
             let timezone = row[4] as? String ?? ""
             
@@ -108,9 +112,15 @@ class CityDao {
         let list = dbHelper.executeSelectQueryWithNumCols(numCols: numCols, query: query)
         
         if let first = list?.first, first.count >= 5 {
-            let cityId = (first[0] as? NSNumber)?.intValue ?? 0
-            let countryId = (first[1] as? NSNumber)?.intValue ?? 0
-            let regionId = (first[2] as? NSNumber)?.intValue ?? 0
+            
+            let cityId = Int(first[0] as? String ?? "0") ?? 0
+            let countryId = Int(first[1] as? String ?? "0") ?? 0
+            let regionId = Int(first[2] as? String ?? "0") ?? 0
+            
+           // let cityId = (first[0] as? NSNumber)?.intValue ?? 0
+           // let countryId = (first[1] as? NSNumber)?.intValue ?? 0
+            //let regionId = (first[2] as? NSNumber)?.intValue ?? 0
+            
             let name = first[3] as? String ?? ""
             let timezone = first[4] as? String ?? ""
             

@@ -42,6 +42,7 @@ class SoundPickerViewController: UIViewController, UITableViewDelegate, UITableV
     
     static func initSounds() {
         fileToDisplayMap = [
+            "apple_default": "Apple Default (no preview)",
             "bell_long.mp3": "Bell",
             "bird2_long.mp3": "Morning Birds",
             "bird_long.mp3": "Forest Birds",
@@ -130,7 +131,7 @@ class SoundPickerViewController: UIViewController, UITableViewDelegate, UITableV
             soundsTable.topAnchor.constraint(equalTo: warningLabel.bottomAnchor, constant: 20),
             soundsTable.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
             soundsTable.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
-            soundsTable.heightAnchor.constraint(greaterThanOrEqualToConstant: 430)
+            soundsTable.heightAnchor.constraint(greaterThanOrEqualToConstant: 480)
         ])
     }
     
@@ -271,7 +272,11 @@ class SoundPickerViewController: UIViewController, UITableViewDelegate, UITableV
         return fileToDisplayMap?[fileName] ?? ""
     }
     
+//    static func defaultValue() -> String {
+//        return "piano_long.mp3"
+//    }
+    
     static func defaultValue() -> String {
-        return "piano_long.mp3"
+        return "apple_default"
     }
 }

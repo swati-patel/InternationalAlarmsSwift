@@ -549,6 +549,13 @@ class MasterViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let city = alarm.city
         let country = alarm.country
         
+        print("switchToAlarmView: alarm: \(alarm.alarm)")
+        
+        print("switchToAlarmView: city name: \(alarm.city?.name ?? "nil"), cityId: \(alarm.city?.cityId ?? 0)")
+        print("switchToAlarmView: country name: \(alarm.country?.name ?? "nil"), countryId: \(alarm.country?.countryId ?? 0)")
+
+
+        
         var cityId = city?.cityId ?? 0
         let countryId = country?.countryId ?? 0
         

@@ -148,11 +148,20 @@ class AlarmPickerViewController: UIViewController, UITextFieldDelegate {
             attributes: [.foregroundColor: AppColors.fadedVeryLightGrey()]
         )
         
+        print("alarmpickercontroller: alarmsound: \(alarmSound ?? "")" )
+        
         if editMode, let date = date {
             datePicker.date = date
             timePicker.date = date
             descText.text = alarmDesc
-            soundSelected.text = "  \(SoundPickerViewController.fileNameToSoundName(alarmSound ?? "")) >"
+            var soundToDisplay: String
+            if (alarmSound == "apple_default") {
+                soundToDisplay = "Apple Default"
+            }
+            else {
+                soundToDisplay = (SoundPickerViewController.fileNameToSoundName(alarmSound ?? ""))
+            }
+            soundSelected.text = "  \(soundToDisplay) >"
         }
         
         setupConstraints()
@@ -359,8 +368,18 @@ class AlarmPickerViewController: UIViewController, UITextFieldDelegate {
         soundPickerViewController?.completionBlock = { [weak self] selectedSoundFilename in
             guard let self = self else { return }
             self.alarmSound = selectedSoundFilename
-            let sound = SoundPickerViewController.fileNameToSoundName(selectedSoundFilename)
-            self.soundSelected.text = "  \(sound) >"
+            
+            var soundToDisplay: String
+            if (selectedSoundFilename == "apple_default") {
+                soundToDisplay = "Apple Default"
+            }
+            else {
+                soundToDisplay = (SoundPickerViewController.fileNameToSoundName(selectedSoundFilename ?? ""))
+            }
+         //   soundSelected.text = "  \(soundToDisplay) >"
+            
+         //   let sound = SoundPickerViewController.fileNameToSoundName(selectedSoundFilename)
+            self.soundSelected.text = "  \(soundToDisplay) >"
         }
         
         if let soundPickerVC = soundPickerViewController {
