@@ -35,10 +35,7 @@ class DatabaseUpdateUtils {
         print("Updating database for \(key)")
         
         _ = dbHelper.openDatabase()
-        
-        
-       // print("------------------ COMMENTED OUT ALTER TABLE QUERY ----------------------")
-        
+      
         let alterTableQuery = "ALTER TABLE Alarms ADD COLUMN AlarmUUID TEXT"
         print("Executing query: \(alterTableQuery)")
         dbHelper.executeQuery(alterTableQuery)
@@ -52,33 +49,19 @@ class DatabaseUpdateUtils {
         for alarm in existingAlarms {
             
             DateUtils.cancelNotification(alarmId: alarm.alarmId)
-            
               
             do {
-                
-                
                 // Get the timezone for this alarm
                 let city = CityDao.getCityById(cityId: alarm.cityId)
                 let timezone = city?.timezone ?? "GMT"
-//
-//                // Convert the alarm date string with timezone
-//                let dateFormatter = DateUtils.getDateFormatter()
-//                let alarmStr = dateFormatter.string(from: alarm.date)
-//
-//                let intDf = DateUtils.getDateFormatterForTimezone(timezone: timezone)
-//                guard let intDate = intDf.date(from: alarmStr) else { continue }
 
-               
                 guard let intDate = DateUtils.convertDateToTimezone(date: alarm.date, timezone: timezone) else { continue }
-                
                 
                 print("Scheduling alarm \(alarm.alarmId): date=\(alarm.date), desc=\(alarm.description ?? "nil"), sound=\(alarm.sound ?? "nil")")
                 
                 // Now use intDate for scheduling
                 let uuid = try await AlarmPickerViewController.scheduleAlarm(intDate: intDate, countryId: alarm.countryId, cityId: alarm.cityId, description: alarm.description, sound: alarm.sound, repeatVal: alarm.repeatValue)
                 print("Alarm scheduled AND saved ")
-                
-               // print("------------------ COMMENTED OUT UPDATE QUERY ----------------------")
                 
                 let updateQuery = "UPDATE Alarms SET AlarmUUID = '\(uuid)' WHERE AlarmID = \(alarm.alarmId)"
                 print("Executing query: \(updateQuery)")
@@ -88,15 +71,36 @@ class DatabaseUpdateUtils {
                 print("Error occurred while scheduling alarm: \(error)")
                 print("Error details: \(error.localizedDescription)")
             }
-
         }
-        
-       // print("UUIDs generated for existing alarms.")
         
         UserDefaults.standard.set(true, forKey: key)
         UserDefaults.standard.synchronize()
         print("UUID field update completed.")
     }
+    
+    static func updateAddRepeatGroupIDFieldToAlarms() {
+        let key = "DatabaseUpdateForRepeatGroupIDField_01Dec2025"
+        if UserDefaults.standard.bool(forKey: key) {
+            print("Database update for RepeatGroupID field already performed.")
+            return
+        }
+        
+        print("Updating database for \(key)")
+        
+        _ = dbHelper.openDatabase()
+      
+        let alterTableQuery = "ALTER TABLE Alarms ADD COLUMN RepeatGroupID TEXT"
+        print("Executing query: \(alterTableQuery)")
+        dbHelper.executeQuery(alterTableQuery)
+        print("RepeatGroupID column added.")
+        
+        // No existing alarms to assign yet – all null
+        
+        UserDefaults.standard.set(true, forKey: key)
+        UserDefaults.standard.synchronize()
+        print("RepeatGroupID field update completed.")
+    }
+
     
     static func updateAddRepeatFieldToAlarms() {
         let key = "DatabaseUpdateForRepeatField_6May2025_V5"

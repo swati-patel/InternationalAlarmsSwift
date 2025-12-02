@@ -42,6 +42,7 @@ import AlarmKit
         DatabaseUpdateUtils.updateLocationNames()
         DatabaseUpdateUtils.updateAddSoundFieldToAlarms()
         DatabaseUpdateUtils.updateAddRepeatFieldToAlarms()
+        DatabaseUpdateUtils.updateAddRepeatGroupIDFieldToAlarms()
         
     
         if #available(iOS 26.0, *) {
